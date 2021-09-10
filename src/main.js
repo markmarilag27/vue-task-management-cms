@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import checkCSRFToken from './services/csrf-token'
 import './assets/tailwind.css'
 
 // is development mode
@@ -24,6 +25,9 @@ Vue.config.silent = !isDev
 
 // assign app name from env
 Vue.prototype.$appName = process.env.VUE_APP_NAME
+
+// check if XSRF-TOKEN exist then request to the back end
+checkCSRFToken()
 
 new Vue({
   router,
