@@ -1,31 +1,18 @@
 <template>
-  <div class="create-modal">
-    <BaseButton @click="isActive = !isActive">
-      Create New Task
+  <div class="task-state-modal">
+    <BaseButton
+      @click="isActive = !isActive"
+      class="bg-gray-500 text-xs font-normal uppercase hover:bg-black px-2 py-1"
+    >
+      {{ task.state.name }}
     </BaseButton>
     <!-- end base button -->
     <BaseModal
       v-model="isActive"
-      title="Create New Task"
-      class-name="max-w-lg"
+      title="Task State"
       :on-submit="onSubmit"
     >
       <template #modal-body>
-        <BaseInput
-          type="text"
-          v-model="form.title"
-          placeholder="Type in task title..."
-          :error="errors.title"
-          @clear="errors.title = undefined"
-        />
-        <!-- end base input -->
-        <BaseTextArea
-          v-model="form.body"
-          placeholder="Type in task description"
-          :error="errors.body"
-          @clear="errors.body = undefined"
-        />
-        <!-- end base text area -->
         <StateAutocomplete
           type="text"
           v-model="searchState"
@@ -35,7 +22,7 @@
           :error="errors.state_id"
           @clear="errors.state_id = undefined"
         />
-        <!-- end state autocomplete -->
+        <!-- end autocomplete -->
       </template>
       <!-- end modal body -->
       <template #modal-footer>
@@ -46,7 +33,7 @@
         >
           <span class="flex justify-center items-center">
             <SVGAnimateSpin v-if="isLoading" />
-            <span :class="{ 'ml-3': isLoading }">Create Task</span>
+            <span :class="{ 'ml-3': isLoading }">Change State</span>
           </span>
         </BaseButton>
         <!-- end submit button -->
@@ -55,82 +42,77 @@
     </BaseModal>
     <!-- end base modal -->
   </div>
-  <!-- end create modal -->
+  <!-- end task state modal -->
 </template>
 
 <script>
-import { postTask } from '@/api/task'
+import { updateTaskState } from '@/api/task'
 import { mapActions } from 'vuex'
 import BaseButton from '@/components/Base/BaseButton.vue'
 import BaseModal from '@/components/Base/BaseModal.vue'
-import BaseInput from '@/components/Base/BaseInput.vue'
-import BaseTextArea from '@/components/Base/BaseTextArea.vue'
 import StateAutocomplete from '@/components/StateAutocomplete.vue'
 import SVGAnimateSpin from '@/components/SVG/SVGAnimateSpin.vue'
 
 export default {
-  name: 'TaskCreateModal',
+  name: 'TaskStateModal',
 
   components: {
     BaseButton,
     BaseModal,
-    BaseInput,
-    BaseTextArea,
     StateAutocomplete,
     SVGAnimateSpin
+  },
+
+  props: {
+    task: {
+      type: Object,
+      default: () => ({})
+    }
   },
 
   data: () => ({
     isActive: false,
     isLoading: false,
-    errors: {},
     searchState: '',
     selectedState: {},
     form: {
-      title: '',
-      body: '',
       state_id: null
-    }
+    },
+    errors: {}
   }),
 
-  watch: {
-    isActive (value) {
-      if (!value && Object.keys(this.errors).length > 0) {
-        this.errors = {}
-      }
-    }
+  created () {
+    this.onSelected(this.task.state)
+    this.searchState = this.task.state.name
   },
 
   methods: {
     ...mapActions({
-      setTaskItem: 'task/setTaskItem',
+      updateTaskItem: 'task/updateTaskItem',
       pushNotification: 'ui/pushNotification'
     }),
     onSubmit () {
       this.errors = {}
       this.isLoading = true
 
-      postTask(this.form)
+      const data = {
+        uuid: this.task.uuid,
+        state_id: this.form.state_id
+      }
+
+      updateTaskState(data)
         .then(({data}) => {
           this.isActive = false
           this.$nextTick(() => {
-            this.clearForm()
-            this.setTaskItem(data)
+            this.updateTaskItem(data)
             const notification = {
               type: 'success',
-              message: `${data.title} task has been created!`
+              message: `${this.task.title} task status has been updated!`
             }
             this.pushNotification(notification)
           })
         })
-        .catch((error) => {
-          this.errors = error?.response?.data?.errors
-          const notification = {
-            type: 'error',
-            message: 'Creating new task failed!'
-          }
-          this.pushNotification(notification)
-        })
+        .catch((error) => (this.errors = error?.response?.data?.errors))
         .finally(() => (this.isLoading = false))
     },
     onSelected (event) {
@@ -141,15 +123,6 @@ export default {
       }
       this.selectedState = event
     },
-    clearForm () {
-      this.searchState = '',
-      this.selectedState = {}
-      this.form = {
-        title: '',
-        body: '',
-        state_id: null
-      }
-    }
-  }
+  },
 }
 </script>

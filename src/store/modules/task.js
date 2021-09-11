@@ -1,5 +1,4 @@
 import { getAllTask } from '@/api/task'
-import { SET_TASK_LOADING_STATE, SET_TASK_DATA, SET_NEW_TASK_ON_DATA } from '@/store/mutation-types'
 
 export default {
   namespaced: true,
@@ -23,8 +22,8 @@ export default {
 
   // mutations
   mutations: {
-    [SET_TASK_LOADING_STATE]: (state, payload) => (state.isLoading = payload),
-    [SET_TASK_DATA]: (state, payload) => {
+    SET_TASK_LOADING_STATE: (state, payload) => (state.isLoading = payload),
+    SET_TASK_DATA: (state, payload) => {
       const cloneList = [...state.list]
       const list = [...payload.data, ...cloneList]
 
@@ -32,9 +31,29 @@ export default {
       state.links = payload.links
       state.meta = payload.meta
     },
-    [SET_NEW_TASK_ON_DATA]: (state, payload) => {
+    SET_TASK_ITEM: (state, payload) => {
       const cloneList = [...state.list]
       const list = [payload, ...cloneList]
+
+      state.list = list
+    },
+    REMOVE_TASK_ITEM: (state, payload) => {
+      const cloneList = [...state.list]
+      const list = cloneList.filter(item => payload.uuid !== item.uuid)
+
+      state.list = list
+    },
+    UPDATE_TASK_ITEM: (state, payload) => {
+      const cloneList = [...state.list]
+      const list = cloneList.map(item => {
+        if (payload.uuid === item.uuid) {
+          return {
+            ...item,
+            state: payload.state
+          }
+        }
+        return item
+      })
 
       state.list = list
     }
@@ -50,6 +69,8 @@ export default {
       commit('SET_TASK_DATA', data)
       commit('SET_TASK_LOADING_STATE', false)
     },
-    createdTask: async ({ commit }, payload) => (commit('SET_NEW_TASK_ON_DATA', payload))
+    setTaskItem: ({ commit }, payload) => (commit('SET_TASK_ITEM', payload)),
+    removeTaskItem: ({ commit }, payload) => (commit('REMOVE_TASK_ITEM', payload)),
+    updateTaskItem: ({ commit }, payload) => (commit('UPDATE_TASK_ITEM', payload))
   }
 }

@@ -73,3 +73,13 @@ export const deleteTask = async (uuid) => {
   const responseStatus = await response.status
   return responseStatus === 204
 }
+
+/**
+ * Update task state
+ *
+ * @param Object data
+ * @returns
+ */
+export const updateTaskState = async (data) => {
+  return await httpClient.patch(`${ENDPOINT}/state`, data)
+}

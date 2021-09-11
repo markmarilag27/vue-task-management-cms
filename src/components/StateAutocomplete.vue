@@ -92,7 +92,7 @@ export default {
       }
     },
     isFocus (value) {
-      if (value && this.value.length === 0 && this.list.length === 0) {
+      if (value && this.value.length === 0 && this.list.length === 0 || value && this.value.length !== 0 && this.value === this.selected.name && this.list.length === 0) {
         this.$nextTick(() => {
           this.fetchData()
         })
@@ -108,6 +108,10 @@ export default {
         const cloneFilter = {...this.filter}
         const newFilter = {...cloneFilter, name: this.value }
         this.filter = newFilter
+      }
+
+      if (this.value === this.selected.name) {
+        delete this.filter.name
       }
 
       getAllStates(this.querySearchParams)

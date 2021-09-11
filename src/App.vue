@@ -15,6 +15,9 @@
     <TopNavigation />
     <!-- end top navigation -->
     <router-view class="max-w-screen-sm mx-auto px-4 py-8" />
+    <!-- end router view -->
+    <Notifications />
+    <!-- end notifications -->
   </main>
   <!-- end authenticated user -->
 </template>
@@ -23,12 +26,14 @@
 import { mapGetters, mapMutations } from 'vuex'
 import { getAuthUserData } from './api/auth'
 import TopNavigation from '@/components/TopNavigation.vue'
+import Notifications from '@/components/Notifications.vue'
 
 export default {
   name: 'App',
 
   components: {
-    TopNavigation
+    TopNavigation,
+    Notifications
   },
 
   computed: {

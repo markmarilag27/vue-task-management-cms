@@ -1,5 +1,4 @@
 import { setAuthUserToken, removeAuthUserToken } from '@/services/auth'
-import { SET_AUTH_USER, RESET_AUTH_USER } from '@/store/mutation-types'
 
 export default {
   namespaced: true,
@@ -17,14 +16,14 @@ export default {
 
   // mutations
   mutations: {
-    [SET_AUTH_USER]: (state, payload) => {
+    SET_AUTH_USER: (state, payload) => {
       if (payload?.access_token && state.access_token === null) {
         state.access_token = payload.access_token
         setAuthUserToken(JSON.stringify(payload))
       }
       state.user = payload?.user
     },
-    [RESET_AUTH_USER]: state => {
+    RESET_AUTH_USER: state => {
       removeAuthUserToken()
       state.access_token = null
       state.user = null
