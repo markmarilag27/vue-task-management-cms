@@ -54,18 +54,31 @@ export default {
   },
 
   watch: {
+    list (value) {
+      this.clonedList = value
+    },
     clonedList (value) {
       if (!isEqual(this.list, value)) {
+        const cloneValue = [...value]
+        const newCloneValue = cloneValue.map(item => ({ sort_order: item.sort_order }))
+        const cloneList = [...this.list]
+        const newCloneList = cloneList.map((item, index) => {
+          return {
+            uuid: item.uuid,
+            ...newCloneValue[index]
+          }
+        })
+
         this.setTaskLoadingState(true)
 
-        reOrderTasks({ tasks: value })
-          .then(({ data }) => {
-            console.log(data)
+        reOrderTasks({ tasks: newCloneList })
+          .then(() => {
             const notification = {
               type: 'success',
               message: `Tasks has been re-ordered!`
             }
             this.pushNotification(notification)
+            this.setTaskList(value)
           })
           .finally(() => (this.setTaskLoadingState(false)))
       }
@@ -75,6 +88,7 @@ export default {
   methods: {
     ...mapActions({
       fetchData: 'task/fetchData',
+      setTaskList: 'task/setTaskList',
       setTaskLoadingState: 'task/setTaskLoadingState',
       pushNotification: 'ui/pushNotification'
     })

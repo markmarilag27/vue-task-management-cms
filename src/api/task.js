@@ -45,9 +45,7 @@ export const getTask = async (uuid, params) => {
  * @returns
  */
 export const reOrderTasks = async (data) => {
-  const response = await httpClient.patch(ENDPOINT, data)
-  const responseData = await response.data
-  return responseData
+  return await httpClient.patch(ENDPOINT, data)
 }
 
 /**
