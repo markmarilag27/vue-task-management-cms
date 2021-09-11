@@ -26,6 +26,14 @@
             placeholder="Type in task description"
           />
           <!-- end base text area -->
+          <StateAutocomplete
+            type="text"
+            v-model="searchState"
+            :selected="selectedState"
+            @change="onSelected"
+            placeholder="Type in to search state"
+          />
+          <!-- end state autocomplete -->
         </form>
         <!-- end form -->
       </template>
@@ -41,6 +49,7 @@ import BaseButton from '@/components/Base/BaseButton.vue'
 import BaseModal from '@/components/Base/BaseModal.vue'
 import BaseInput from '@/components/Base/BaseInput.vue'
 import BaseTextArea from '@/components/Base/BaseTextArea.vue'
+import StateAutocomplete from '@/components/StateAutocomplete.vue'
 
 export default {
   name: 'TaskCreateModal',
@@ -49,13 +58,16 @@ export default {
     BaseButton,
     BaseModal,
     BaseInput,
-    BaseTextArea
+    BaseTextArea,
+    StateAutocomplete
   },
 
   data: () => ({
     isActive: false,
     isLoading: false,
     errors: {},
+    searchState: '',
+    selectedState: {},
     form: {
       title: '',
       body: '',
@@ -64,7 +76,15 @@ export default {
   }),
 
   methods: {
-    onSubmit () {}
+    onSubmit () {},
+    onSelected (event) {
+      if (event.id) {
+        this.form.state_id = event.id
+      } else {
+        this.form.state_id = null
+      }
+      this.selectedState = event
+    }
   }
 }
 </script>

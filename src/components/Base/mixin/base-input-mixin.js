@@ -1,3 +1,5 @@
+import debounce from 'lodash.debounce'
+
 export default {
   inheritAttrs: false,
 
@@ -22,6 +24,9 @@ export default {
       if (typeof this.error !== 'undefined') {
         this.$emit('clear')
       }
-    }
+    },
+    emitValueDebounce: debounce(function (event) {
+      this.emitValue(event)
+    }, 500)
   }
 }
