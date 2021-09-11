@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import checkCSRFToken from './services/csrf-token'
+import { validateXsrfToken, validateAuthUserToken } from './services/auth'
 import './assets/tailwind.css'
 
 // is development mode
@@ -26,11 +26,16 @@ Vue.config.silent = !isDev
 // assign app name from env
 Vue.prototype.$appName = process.env.VUE_APP_NAME
 
-// check if XSRF-TOKEN exist then request to the back end
-checkCSRFToken()
+// request XSRF-TOKEN
+validateXsrfToken()
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+// attempt to re-authenticate if the auth token is still
+// initialize it before rendering to prevent flickering
+store.dispatch('auth/setUser', validateAuthUserToken())
+  .then(() => {
+    new Vue({
+      router,
+      store,
+      render: h => h(App)
+    }).$mount('#app')
+  })

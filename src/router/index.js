@@ -22,6 +22,8 @@ router.beforeEach((to, from, next) => {
       next({ name: 'login' })
     }
     next()
+  } else if (!requiresAuth && isAuthenticated) {
+    next({ name: 'home' })
   }
   next()
 })

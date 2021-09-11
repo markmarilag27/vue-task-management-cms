@@ -1,3 +1,4 @@
+import { setAuthUserToken, removeAuthUserToken } from '@/services/auth'
 import { SET_AUTH_USER, RESET_AUTH_USER } from '../mutation-types'
 
 export default {
@@ -11,16 +12,20 @@ export default {
 
   // getters
   getters: {
-    isAuthenticated: state => !!state.user
+    isAuthenticated: state => !!state.access_token
   },
 
   // mutations
   mutations: {
     [SET_AUTH_USER]: (state, payload) => {
-      state.access_token = payload.access_token
-      state.user = payload.user
+      if (payload?.access_token && state.access_token === null) {
+        state.access_token = payload.access_token
+        setAuthUserToken(JSON.stringify(payload))
+      }
+      state.user = payload?.user
     },
     [RESET_AUTH_USER]: state => {
+      removeAuthUserToken()
       state.access_token = null
       state.user = null
     }
@@ -28,6 +33,9 @@ export default {
 
   // actions
   actions: {
-    setUser: ({ commit }, payload) => (commit('SET_AUTH_USER', payload))
+    setUser: ({ commit }, payload) => {
+      const data = typeof payload === 'string' ? JSON.parse(payload) : payload
+      commit('SET_AUTH_USER', data)
+    }
   }
 }

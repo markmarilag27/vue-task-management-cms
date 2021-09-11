@@ -46,7 +46,7 @@
 
 <script>
 import { postLogin } from '@/api/auth'
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 import BaseInput from '@/components/Base/BaseInput.vue'
 import BaseButton from '@/components/Base/BaseButton.vue'
 import SVGAnimateSpin from '@/components/SVG/SVGAnimateSpin.vue'
@@ -70,8 +70,8 @@ export default {
   }),
 
   methods: {
-    ...mapMutations({
-      SET_AUTH_USER: 'auth/SET_AUTH_USER'
+    ...mapActions({
+      setUser: 'auth/setUser'
     }),
     onSubmit () {
       this.errors = {}
@@ -79,7 +79,7 @@ export default {
 
       postLogin(this.form)
         .then(({data}) => {
-          this.SET_AUTH_USER(data)
+          this.setUser(data)
           this.$router.push({ name: 'home' })
         })
         .catch((error) => this.errors = error?.response?.data?.errors)
