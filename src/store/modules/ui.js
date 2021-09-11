@@ -5,18 +5,7 @@ export default {
 
   // initial state
   state: {
-    notifications: [
-      {
-        id: 1,
-        type: 'error',
-        message: 'Something went wrong!'
-      },
-      {
-        id: 2,
-        type: 'success',
-        message: 'Successfully created!'
-      }
-    ]
+    notifications: []
   },
 
   // getters
