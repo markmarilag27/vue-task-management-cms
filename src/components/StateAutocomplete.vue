@@ -1,5 +1,8 @@
 <template>
-  <div class="relative inline-block w-full my-2 py-2">
+  <div
+    class="relative inline-block w-full"
+    :class="rootClassName"
+  >
     <input
       :value="value"
       @input="emitValueDebounce"
@@ -51,6 +54,10 @@ export default {
     selected: {
       type: Object,
       default: () => ({})
+    },
+    rootClassName: {
+      type: [String, undefined],
+      default: undefined
     }
   },
 
@@ -115,6 +122,7 @@ export default {
     onSelected (value) {
       this.$emit('input', value.name)
       this.$emit('change', value)
+      this.$emit('clear')
       this.isFocus = false
     }
   }

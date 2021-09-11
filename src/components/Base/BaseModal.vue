@@ -8,9 +8,11 @@
       @click="closeModal"
     />
     <!-- end zone -->
-    <div
+    <form
+      @submit.prevent="onSubmit"
       class="bg-white shadow rounded py-4 px-4 w-full"
       :class="className"
+      v-bind="$attrs"
     >
       <header class="flex justify-between items-center">
         <div
@@ -20,7 +22,6 @@
         <!-- end title -->
         <BaseButton
           @click="closeModal"
-          type="button"
           class="w-auto px-0 py-0 bg-transparent text-black"
         >
           <SVGClose />
@@ -38,7 +39,6 @@
         <BaseButton
           v-if="closeBtn"
           @click="closeModal"
-          type="button"
           class="w-auto py-2"
         >
           Close
@@ -46,7 +46,7 @@
         <slot name="modal-footer" />
       </footer>
       <!-- end with footer -->
-    </div>
+    </form>
     <!-- end body -->
   </div>
   <!-- end modal -->
@@ -63,6 +63,8 @@ export default {
     BaseButton,
     SVGClose
   },
+
+  inheritAttrs: false,
 
   props: {
     value: {
@@ -84,6 +86,10 @@ export default {
     closeBtn: {
       type: Boolean,
       default: true
+    },
+    onSubmit: {
+      type: Function,
+      default: () => {}
     }
   },
 

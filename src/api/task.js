@@ -21,9 +21,7 @@ export const getAllTask = async (params) => {
  * @returns
  */
  export const postTask = async (data) => {
-  const response = await httpClient.post(ENDPOINT, data)
-  const responseData = await response.data
-  return responseData
+  return await httpClient.post(ENDPOINT, data)
 }
 
 

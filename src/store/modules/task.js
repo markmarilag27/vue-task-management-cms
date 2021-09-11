@@ -1,5 +1,5 @@
 import { getAllTask } from '@/api/task'
-import { SET_TASK_LOADING_STATE, SET_TASK_DATA } from '@/store/mutation-types'
+import { SET_TASK_LOADING_STATE, SET_TASK_DATA, SET_NEW_TASK_ON_DATA } from '@/store/mutation-types'
 
 export default {
   namespaced: true,
@@ -31,6 +31,12 @@ export default {
       state.list = list
       state.links = payload.links
       state.meta = payload.meta
+    },
+    [SET_NEW_TASK_ON_DATA]: (state, payload) => {
+      const cloneList = [...state.list]
+      const list = [payload, ...cloneList]
+
+      state.list = list
     }
   },
 
@@ -43,6 +49,7 @@ export default {
 
       commit('SET_TASK_DATA', data)
       commit('SET_TASK_LOADING_STATE', false)
-    }
+    },
+    createdTask: async ({ commit }, payload) => (commit('SET_NEW_TASK_ON_DATA', payload))
   }
 }
