@@ -69,6 +69,7 @@ export default {
       commit('SET_TASK_DATA', data)
       commit('SET_TASK_LOADING_STATE', false)
     },
+    setTaskLoadingState: ({ commit }, payload) => (commit('SET_TASK_LOADING_STATE', payload)),
     setTaskItem: ({ commit }, payload) => (commit('SET_TASK_ITEM', payload)),
     removeTaskItem: ({ commit }, payload) => (commit('REMOVE_TASK_ITEM', payload)),
     updateTaskItem: ({ commit }, payload) => (commit('UPDATE_TASK_ITEM', payload))

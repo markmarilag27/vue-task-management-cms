@@ -1,23 +1,42 @@
 <template>
-  <div class="flex flex-wrap gap-4 flex-col">
+  <draggable
+    v-model="clonedList"
+    group="task"
+    @start="drag=true"
+    @end="drag=false"
+    class="flex flex-wrap gap-4 flex-col"
+    :animation="200"
+    ghost-class="ghost"
+  >
     <TaskItem
-      v-for="task in list"
+      v-for="task in clonedList"
       :key="task.sort_order"
       :task="task"
     />
     <!-- end task item -->
-  </div>
+  </draggable>
 </template>
 
 <script>
+import { reOrderTasks } from '@/api/task'
 import { mapState, mapActions } from 'vuex'
+import cloneDeep from 'lodash.clonedeep'
+import isEqual from 'lodash.isequal'
+import draggable from 'vuedraggable'
 import TaskItem from './TaskItem.vue'
 
 export default {
   name: 'TaskList',
 
   components: {
-    TaskItem
+    TaskItem,
+    draggable
+  },
+
+  data () {
+    return {
+      clonedList: []
+    }
   },
 
   computed: {
@@ -31,13 +50,41 @@ export default {
   },
 
   created () {
-    this.fetchData()
+    this.fetchData().then(() => (this.clonedList = cloneDeep(this.list)))
+  },
+
+  watch: {
+    clonedList (value) {
+      if (!isEqual(this.list, value)) {
+        this.setTaskLoadingState(true)
+
+        reOrderTasks({ tasks: value })
+          .then(({ data }) => {
+            console.log(data)
+            const notification = {
+              type: 'success',
+              message: `Tasks has been re-ordered!`
+            }
+            this.pushNotification(notification)
+          })
+          .finally(() => (this.setTaskLoadingState(false)))
+      }
+    }
   },
 
   methods: {
     ...mapActions({
-      fetchData: 'task/fetchData'
+      fetchData: 'task/fetchData',
+      setTaskLoadingState: 'task/setTaskLoadingState',
+      pushNotification: 'ui/pushNotification'
     })
   }
 }
 </script>
+
+<style scoped>
+.ghost {
+  opacity: 0.45;
+  background-color: rgb(107, 114, 128);
+}
+</style>

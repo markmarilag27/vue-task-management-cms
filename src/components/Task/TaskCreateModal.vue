@@ -1,6 +1,9 @@
 <template>
   <div class="create-modal">
-    <BaseButton @click="isActive = !isActive">
+    <BaseButton
+      class="bg-black text-white"
+      @click="isActive = !isActive"
+    >
       Create New Task
     </BaseButton>
     <!-- end base button -->
@@ -41,7 +44,7 @@
       <template #modal-footer>
         <BaseButton
           type="submit"
-          class="w-auto"
+          class="w-auto bg-green-500 text-white"
           :disabled="isLoading"
         >
           <span class="flex justify-center items-center">

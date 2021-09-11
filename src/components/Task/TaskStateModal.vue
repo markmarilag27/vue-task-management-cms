@@ -2,7 +2,7 @@
   <div class="task-state-modal">
     <BaseButton
       @click="isActive = !isActive"
-      class="bg-gray-500 text-xs font-normal uppercase hover:bg-black px-2 py-1"
+      class="bg-black text-xs text-white font-normal uppercase hover:bg-gray-500 px-2 py-1"
     >
       {{ task.state.name }}
     </BaseButton>
@@ -28,7 +28,7 @@
       <template #modal-footer>
         <BaseButton
           type="submit"
-          class="w-auto"
+          class="w-auto bg-green-500 text-white"
           :disabled="isLoading"
         >
           <span class="flex justify-center items-center">

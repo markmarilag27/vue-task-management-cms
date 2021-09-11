@@ -22,7 +22,7 @@
       <template #modal-footer>
         <BaseButton
           type="submit"
-          class="w-auto"
+          class="w-auto bg-red-500 text-white"
           :disabled="isLoading"
         >
           <span class="flex justify-center items-center">

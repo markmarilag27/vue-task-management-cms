@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-grow bg-white shadow rounded p-4">
+  <div class="flex-grow bg-white shadow rounded p-4 cursor-move">
     <div class="flex flex-wrap justify-between items-center mb-4">
       <h2 v-text="task.title" />
       <!-- end title -->
