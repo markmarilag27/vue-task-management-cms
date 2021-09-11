@@ -1,5 +1,5 @@
 import { setAuthUserToken, removeAuthUserToken } from '@/services/auth'
-import { SET_AUTH_USER, RESET_AUTH_USER } from '../mutation-types'
+import { SET_AUTH_USER, RESET_AUTH_USER } from '@/store/mutation-types'
 
 export default {
   namespaced: true,

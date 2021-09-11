@@ -14,7 +14,7 @@
   >
     <TopNavigation />
     <!-- end top navigation -->
-    <router-view class="max-w-screen-md mx-auto px-4 py-8" />
+    <router-view class="max-w-screen-sm mx-auto px-4 py-8" />
   </main>
   <!-- end authenticated user -->
 </template>

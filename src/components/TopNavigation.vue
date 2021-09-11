@@ -58,3 +58,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.fixed {
+  z-index: 1023;
+}
+</style>

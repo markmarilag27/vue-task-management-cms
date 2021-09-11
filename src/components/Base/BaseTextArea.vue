@@ -1,13 +1,13 @@
 <template>
   <div class="w-full my-2 py-2">
-    <input
+    <textarea
       :value="value"
       @input="emitValue"
       class="w-full py-3 px-3 border-gray-600 rounded border-2"
-      :class="[className, error ? 'border-red-500' : '']"
+      :class="[ className, error ? 'border-red-500' : '' ]"
       v-bind="$attrs"
-    >
-    <!-- end input -->
+    />
+    <!-- end textarea -->
     <div
       v-if="error"
       class="text-red-500 mt-2"
@@ -21,7 +21,7 @@
 import BaseInputMixin from './mixin/base-input-mixin'
 
 export default {
-  name: 'BaseInput',
+  name: 'BaseTextArea',
 
   mixins: [BaseInputMixin]
 }
