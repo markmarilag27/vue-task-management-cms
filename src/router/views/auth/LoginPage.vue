@@ -32,6 +32,7 @@
       <BaseButton
         type="submit"
         class="mt-2"
+        :disabled="isLoading"
       >
         <span class="flex justify-center items-center">
           <SVGAnimateSpin v-if="isLoading" />
@@ -63,7 +64,7 @@ export default {
   data: () => ({
     isLoading: false,
     form: {
-      email: 'vladimir.pfeffer@example.net',
+      email: 'john.doe@laravel.com',
       password: 'password'
     },
     errors: {}

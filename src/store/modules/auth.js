@@ -35,7 +35,7 @@ export default {
   actions: {
     setUser: ({ commit }, payload) => {
       const data = typeof payload === 'string' ? JSON.parse(payload) : payload
-      commit('SET_AUTH_USER', data)
+      return commit('SET_AUTH_USER', data)
     }
   }
 }

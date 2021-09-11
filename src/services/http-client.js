@@ -1,5 +1,8 @@
 import axios from 'axios'
 import store from '@/store'
+import router from '@/router'
+
+const AUTH_USER_ENDPOINT = '/api/v1/auth/me'
 
 const httpClient = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -31,6 +34,10 @@ httpClient.interceptors.response.use(
     return response
   },
   (error) => {
+    if (error.response.status === 401 && error.response.config.url === AUTH_USER_ENDPOINT) {
+      store.commit('auth/RESET_AUTH_USER')
+      router.push({ name: 'login' })
+    }
     return Promise.reject(error)
   }
 )

@@ -5,8 +5,8 @@ const ENDPOINT = '/api/v1/auth'
 // get csrf token
 export const getCsrfToken = async () => {
   const response = await httpClient.get('/sanctum/csrf-cookie')
-  const data = await response.data
-  return data
+  const status = await response.status
+  return status
 }
 
 // send the login credentials
@@ -21,4 +21,11 @@ export const getAuthUserData = async () => {
   const response = await httpClient.get(`${ENDPOINT}/me`)
   const data = await response.data
   return data
+}
+
+// send the logout
+export const postLogout = async () => {
+  const response = await httpClient.post(`${ENDPOINT}/logout`)
+  const status = await response.status
+  return status
 }

@@ -1,0 +1,60 @@
+<template>
+  <nav class="bg-black fixed top-0 left-0 right-0 flex justify-between py-3 px-4">
+    <h1 class="font-bold text-white">
+      Task Management
+    </h1>
+    <!-- end task management -->
+    <form @submit.prevent="onSubmit">
+      <BaseButton
+        type="submit"
+        class="py-1"
+        :disabled="isLoading"
+      >
+        <span class="flex justify-center items-center">
+          <SVGAnimateSpin v-if="isLoading" />
+          <span :class="{ 'ml-3': isLoading }">Logout</span>
+        </span>
+      </BaseButton>
+    </form>
+    <!-- end form -->
+  </nav>
+  <!-- end navigation -->
+</template>
+
+<script>
+import { postLogout } from '@/api/auth'
+import { mapMutations } from 'vuex'
+import BaseButton from './Base/BaseButton.vue'
+import SVGAnimateSpin from './SVG/SVGAnimateSpin.vue'
+
+export default {
+  name: 'TopNavigation',
+
+  components: {
+    BaseButton,
+    SVGAnimateSpin
+  },
+
+  data: () => ({
+    isLoading: false
+  }),
+
+  methods: {
+    ...mapMutations({
+      removeAuthUser: 'auth/RESET_AUTH_USER'
+    }),
+    onSubmit () {
+      this.isLoading = true
+
+      postLogout()
+        .then(() => {
+          this.removeAuthUser()
+          this.$nextTick(() => {
+            this.$router.push({ name: 'login' })
+          })
+        })
+        .finally(() => (this.isLoading = false))
+    }
+  }
+}
+</script>
