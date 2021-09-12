@@ -10,7 +10,7 @@
       <!-- end task state modal -->
     </div>
     <p
-      class="text-sm text-gray-500 mb-2 tracking-wider leading-relaxed truncate max-w-lg"
+      class="text-sm text-gray-500 mb-2 tracking-wider leading-relaxed"
       v-text="task.body"
     />
     <!-- end description -->

@@ -3,8 +3,18 @@
     id="index-page"
     class="min-h-screen h-full"
   >
-    <div class="flex flex-wrap justify-between py-8">
+    <div class="flex flex-wrap justify-between items-center py-8">
       <TaskCreateModal :uuid="uuid" />
+      <!-- end task create modal -->
+      <BaseButton
+        v-if="uuid"
+        @click="backRoute"
+        class="w-auto flex items-center gap-2 hover:bg-black hover:text-white"
+      >
+        <SVGArrowLeft />
+        <span>Back</span>
+      </BaseButton>
+      <!-- end back btn -->
     </div>
     <!-- end flex -->
     <BaseTabs>
@@ -33,6 +43,8 @@
 import TaskList from '@/components/Task/TaskList.vue'
 import TaskCreateModal from '@/components/Task/TaskCreateModal.vue'
 import BaseTabs from '@/components/Base/BaseTabs.vue'
+import BaseButton from '@/components/Base/BaseButton.vue'
+import SVGArrowLeft from '@/components/SVG/SVGArrowLeft.vue'
 
 export default {
   name: 'IndexPage',
@@ -40,12 +52,23 @@ export default {
   components: {
     TaskList,
     TaskCreateModal,
-    BaseTabs
+    BaseTabs,
+    BaseButton,
+    SVGArrowLeft
   },
 
   computed: {
     uuid () {
       return this.$route.params?.uuid
+    }
+  },
+
+  methods: {
+    backRoute () {
+      if (this.uuid) {
+        this.$router.go(-1)
+      }
+      return
     }
   }
 }
