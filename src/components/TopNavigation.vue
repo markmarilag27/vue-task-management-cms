@@ -6,19 +6,27 @@
       </router-link>
     </h1>
     <!-- end task management -->
-    <form @submit.prevent="onSubmit">
-      <BaseButton
-        type="submit"
-        class="py-1 text-white"
-        :disabled="isLoading"
-      >
-        <span class="flex justify-center items-center">
-          <SVGAnimateSpin v-if="isLoading" />
-          <span :class="{ 'ml-3': isLoading }">Logout</span>
-        </span>
-      </BaseButton>
-    </form>
-    <!-- end form -->
+    <div class="flex items-center gap-4">
+      <ExportButton
+        v-for="(exportable, index) in exportData"
+        :key="index"
+        :exportable="exportable"
+      />
+      <!-- end export button -->
+      <form @submit.prevent="onSubmit">
+        <BaseButton
+          type="submit"
+          class="py-1 text-white"
+          :disabled="isLoading"
+        >
+          <span class="flex justify-center items-center">
+            <SVGAnimateSpin v-if="isLoading" />
+            <span :class="{ 'ml-3': isLoading }">Logout</span>
+          </span>
+        </BaseButton>
+      </form>
+      <!-- end form -->
+    </div>
   </nav>
   <!-- end navigation -->
 </template>
@@ -28,17 +36,33 @@ import { postLogout } from '@/api/auth'
 import { mapActions } from 'vuex'
 import BaseButton from './Base/BaseButton.vue'
 import SVGAnimateSpin from './SVG/SVGAnimateSpin.vue'
+import ExportButton from './ExportButton.vue'
 
 export default {
   name: 'TopNavigation',
 
   components: {
     BaseButton,
-    SVGAnimateSpin
+    SVGAnimateSpin,
+    ExportButton
   },
 
   data: () => ({
-    isLoading: false
+    isLoading: false,
+    exportData: [
+      {
+        text: 'Export Excel',
+        query: 'excel'
+      },
+      {
+        text: 'Export CSV',
+        query: 'csv'
+      },
+      {
+        text: 'Export JSON',
+        query: 'json'
+      }
+    ]
   }),
 
   methods: {
