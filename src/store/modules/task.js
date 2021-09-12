@@ -1,4 +1,4 @@
-import { getAllTask } from '@/api/task'
+import { getAllTask, getTask } from '@/api/task'
 
 export default {
   namespaced: true,
@@ -6,7 +6,6 @@ export default {
   // initial state
   state: {
     isLoading: false,
-    trashed: false,
     list: [],
     links: {},
     meta: {},
@@ -26,10 +25,7 @@ export default {
     SET_TASK_LOADING_STATE: (state, payload) => (state.isLoading = payload),
     SET_TASK_LIST: (state, payload) => (state.list = payload),
     SET_TASK_DATA: (state, payload) => {
-      const cloneList = [...state.list]
-      const list = state.trashed ? [...payload.data] : [...payload.data, ...cloneList]
-
-      state.list = list.sort((a, b) => b.sort_order - a.sort_order)
+      state.list = payload.data.sort((a, b) => b.sort_order - a.sort_order)
       state.links = payload.links
       state.meta = payload.meta
     },
@@ -64,10 +60,8 @@ export default {
       let newFilter = {...clonedFilter}
       if (payload.only_trashed) {
         newFilter = {...payload, ...clonedFilter}
-        state.trashed = true
       } else {
         delete newFilter.only_trashed
-        state.trashed = false
       }
       state.filter = newFilter
     }
@@ -75,10 +69,16 @@ export default {
 
   // actions
   actions: {
-    fetchData: async ({ commit, getters }) => {
+    fetchData: async ({ commit, getters }, payload) => {
       commit('SET_TASK_LOADING_STATE', true)
 
-      const data = await getAllTask(getters.querySearchParams)
+      let data = {}
+
+      if (typeof payload === 'undefined') {
+        data = await getAllTask(getters.querySearchParams)
+      } else {
+        data = await getTask(payload, getters.querySearchParams)
+      }
 
       commit('SET_TASK_DATA', data)
       commit('SET_TASK_LOADING_STATE', false)

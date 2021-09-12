@@ -1,7 +1,9 @@
 <template>
   <nav class="bg-black fixed top-0 left-0 right-0 flex justify-between py-3 px-4">
     <h1 class="font-bold text-white">
-      Task Management
+      <router-link to="/">
+        Task Management
+      </router-link>
     </h1>
     <!-- end task management -->
     <form @submit.prevent="onSubmit">

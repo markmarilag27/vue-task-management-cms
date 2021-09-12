@@ -3,7 +3,16 @@ const routes = [
     path: '/',
     name: 'home',
     component: () => import(/* webpackChunkName: "index" */ './views/IndexPage.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '/:uuid',
+        name: 'subtask',
+        component: () => import(/* webpackChunkName: "index" */ './views/IndexPage.vue'),
+        meta: { requiresAuth: true },
+        props: true
+      }
+    ]
   },
   {
     path: '/login',

@@ -70,6 +70,12 @@ export default {
       if (this.trashed) {
         return
       }
+      this.$router.push({
+        name: 'subtask',
+        params: {
+          uuid: this.task.uuid
+        }
+      })
     }
   }
 }

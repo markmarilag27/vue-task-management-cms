@@ -4,7 +4,7 @@
     class="min-h-screen h-full"
   >
     <div class="flex flex-wrap justify-between py-8">
-      <TaskCreateModal />
+      <TaskCreateModal :uuid="uuid" />
     </div>
     <!-- end flex -->
     <BaseTabs>
@@ -12,12 +12,14 @@
         <TaskList
           v-if="props === 0"
           :current-tab="props"
+          :uuid="uuid"
         />
         <!-- end task list -->
         <TaskList
           v-else
           :only-trashed="props === 1"
           :current-tab="props"
+          :uuid="uuid"
         />
         <!-- end task list -->
       </template>
@@ -39,6 +41,12 @@ export default {
     TaskList,
     TaskCreateModal,
     BaseTabs
+  },
+
+  computed: {
+    uuid () {
+      return this.$route.params?.uuid
+    }
   }
 }
 </script>

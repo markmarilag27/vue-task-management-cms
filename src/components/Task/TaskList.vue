@@ -51,6 +51,10 @@ export default {
     currentTab: {
       type: Number,
       default: 0
+    },
+    uuid: {
+      type: [String, undefined],
+      default: undefined
     }
   },
 
@@ -71,11 +75,11 @@ export default {
   },
 
   created () {
-    this.setFilter({ only_trashed: this.onlyTrashed })
-    this.fetchData().then(() => (this.clonedList = cloneDeep(this.list)))
+    this.requestData()
   },
 
   watch: {
+    '$route': 'requestData',
     list (value) {
       this.clonedList = value
     },
@@ -106,8 +110,7 @@ export default {
       }
     },
     currentTab () {
-      this.setFilter({ only_trashed: this.onlyTrashed })
-      this.fetchData().then(() => (this.clonedList = cloneDeep(this.list)))
+      this.requestData()
     }
   },
 
@@ -118,7 +121,11 @@ export default {
       setTaskLoadingState: 'task/setTaskLoadingState',
       setFilter: 'task/setFilter',
       pushNotification: 'ui/pushNotification'
-    })
+    }),
+    requestData () {
+      this.setFilter({ only_trashed: this.onlyTrashed })
+      this.fetchData(this.uuid).then(() => (this.clonedList = cloneDeep(this.list)))
+    }
   }
 }
 </script>

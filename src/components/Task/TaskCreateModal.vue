@@ -83,6 +83,13 @@ export default {
     SVGAnimateSpin
   },
 
+  props: {
+    uuid: {
+      type: [String, undefined],
+      default: undefined
+    }
+  },
+
   data: () => ({
     isActive: false,
     isLoading: false,
@@ -113,7 +120,9 @@ export default {
       this.errors = {}
       this.isLoading = true
 
-      postTask(this.form)
+      let form = typeof this.uuid === 'undefined' ? this.form : {...this.form, uuid: this.uuid}
+
+      postTask(form)
         .then(({data}) => {
           this.isActive = false
           this.$nextTick(() => {
