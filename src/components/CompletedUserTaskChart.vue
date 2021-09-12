@@ -19,35 +19,16 @@
 
 <script>
 import { Chart, registerables } from 'chart.js'
-import { mapState } from 'vuex'
-import { getCompletedTask } from '@/api/auth'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'CompletedUserTaskChart',
 
-  data () {
-    return {
-      list: null,
-      isLoading: false,
-      chartData: {
-        type: "line",
-        height: "360px",
-        data: {
-          labels: [],
-          datasets: []
-        },
-        options: {
-          legend: {
-            position: false
-          }
-        }
-      }
-    }
-  },
-
   computed: {
     ...mapState({
-      user: state => state.auth.user
+      user: state => state.auth.user,
+      isLoading: state => state.chart.isLoading,
+      chartData: state => state.chart.chartData
     })
   },
 
@@ -67,6 +48,9 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      fetchData: 'chart/fetchData'
+    }),
     createChart (chartData) {
       const ctx = this.$refs.chart
       new Chart(ctx, {
@@ -74,43 +58,6 @@ export default {
         data: chartData.data,
         options: chartData.options
       })
-    },
-    fetchData () {
-      this.isLoading = true
-
-      getCompletedTask()
-        .then(({ data }) => {
-          const labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-          const values = Object.values(data).map(result => result.length)
-          const mergeKeyValues = Object.keys(data).map((label, key) => {
-            return {
-              label: label,
-              value: values[key]
-            }
-          })
-          const newValues = labels.map(label => {
-            if (mergeKeyValues.some(originData => label === originData.label)) {
-              return mergeKeyValues.find(origin => origin.label === label).value
-            }
-            return 0
-          })
-          this.chartData.data.labels = labels
-          this.chartData.data.datasets = [
-            {
-              label: 'Completed Task',
-              borderColor: "#4A5568",
-              data: newValues,
-              fill: false,
-              pointBackgroundColor: "#4A5568",
-              borderWidth: "3",
-              pointBorderWidth: "4",
-              pointHoverRadius: "6",
-              pointHoverBorderWidth: "8",
-              pointHoverBorderColor: "rgb(74,85,104,0.2)"
-            }
-          ]
-        })
-        .finally(() => (this.isLoading = false))
     }
   }
 }

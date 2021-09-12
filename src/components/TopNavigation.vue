@@ -67,14 +67,14 @@ export default {
 
   methods: {
     ...mapActions({
-      removeAuthUser: 'auth/removeAuthUser'
+      resetAuthUser: 'auth/resetAuthUser'
     }),
     onSubmit () {
       this.isLoading = true
 
       postLogout()
         .then(() => {
-          this.removeAuthUser()
+          this.resetAuthUser()
           this.$nextTick(() => {
             this.$router.push({ name: 'login' })
           })
