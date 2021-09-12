@@ -4,7 +4,10 @@
     class="min-h-screen h-full"
   >
     <div class="flex flex-wrap justify-between items-center py-8">
-      <TaskCreateModal :uuid="uuid" />
+      <TaskCreateModal
+        :uuid="uuid"
+        :disabled="trashed"
+      />
       <!-- end task create modal -->
       <BaseButton
         v-if="uuid"
@@ -21,14 +24,14 @@
       <template v-slot="{ props }">
         <TaskList
           v-if="props === 0"
-          :current-tab="props"
+          :current-tab="determineIndex(props)"
           :uuid="uuid"
         />
         <!-- end task list -->
         <TaskList
           v-else
           :only-trashed="props === 1"
-          :current-tab="props"
+          :current-tab="determineIndex(props)"
           :uuid="uuid"
         />
         <!-- end task list -->
@@ -57,6 +60,10 @@ export default {
     SVGArrowLeft
   },
 
+  data: () => ({
+    trashed: false
+  }),
+
   computed: {
     uuid () {
       return this.$route.params?.uuid
@@ -69,6 +76,10 @@ export default {
         this.$router.go(-1)
       }
       return
+    },
+    determineIndex (index) {
+      this.trashed = !!index
+      return index
     }
   }
 }

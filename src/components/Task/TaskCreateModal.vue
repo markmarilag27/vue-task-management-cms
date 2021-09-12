@@ -2,7 +2,8 @@
   <div class="create-modal">
     <BaseButton
       class="bg-black text-white"
-      @click="isActive = !isActive"
+      :class="{ 'opacity-50 cursor-not-allowed': disabled }"
+      @click="toggleActive"
     >
       Create New Task
     </BaseButton>
@@ -87,7 +88,11 @@ export default {
     uuid: {
       type: [String, undefined],
       default: undefined
-    }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
   },
 
   data: () => ({
@@ -117,6 +122,10 @@ export default {
       pushNotification: 'ui/pushNotification'
     }),
     onSubmit () {
+      if (this.disabled) {
+        return
+      }
+
       this.errors = {}
       this.isLoading = true
 
@@ -161,6 +170,12 @@ export default {
         body: '',
         state_id: null
       }
+    },
+    toggleActive () {
+      if (this.disabled) {
+        return
+      }
+      this.isActive = !this.isActive
     }
   }
 }
