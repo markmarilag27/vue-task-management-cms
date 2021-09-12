@@ -7,14 +7,30 @@
       <TaskCreateModal />
     </div>
     <!-- end flex -->
-    <TaskList />
-    <!-- end task list -->
+    <BaseTabs>
+      <template v-slot="{ props }">
+        <TaskList
+          v-if="props === 0"
+          :current-tab="props"
+        />
+        <!-- end task list -->
+        <TaskList
+          v-else
+          :only-trashed="props === 1"
+          :current-tab="props"
+        />
+        <!-- end task list -->
+      </template>
+      <!-- end template -->
+    </BaseTabs>
+    <!-- end base tabs -->
   </div>
 </template>
 
 <script>
 import TaskList from '@/components/Task/TaskList.vue'
 import TaskCreateModal from '@/components/Task/TaskCreateModal.vue'
+import BaseTabs from '@/components/Base/BaseTabs.vue'
 
 export default {
   name: 'IndexPage',
@@ -22,6 +38,7 @@ export default {
   components: {
     TaskList,
     TaskCreateModal,
+    BaseTabs
   }
 }
 </script>

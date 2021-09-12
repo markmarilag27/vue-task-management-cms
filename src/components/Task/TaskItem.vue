@@ -3,7 +3,10 @@
     <div class="flex flex-wrap justify-between items-center mb-4">
       <h2 v-text="task.title" />
       <!-- end title -->
-      <TaskStateModal :task="task" />
+      <TaskStateModal
+        :task="task"
+        :trashed="trashed"
+      />
       <!-- end task state modal -->
     </div>
     <p
@@ -12,11 +15,23 @@
     />
     <!-- end description -->
     <div class="flex flex-wrap gap-4 mt-8">
-      <BaseButton class="w-auto py-2 text-sm font-normal border-2 border-black bg-transparent text-black hover:bg-black hover:text-white">
+      <BaseButton
+        @click="goToTask"
+        class="w-auto py-2 text-sm font-normal border-2 border-black bg-transparent text-black "
+        :class="[ trashed ? 'opacity-50 cursor-not-allowed' : 'hover:bg-black hover:text-white']"
+      >
         View ({{ task.total_subtask }}) Sub {{ task.total_subtask > 1 ? 'Tasks' : 'Task' }}
       </BaseButton>
       <!-- end button -->
-      <TaskDeleteModal :task="task" />
+      <TaskRestoreModal
+        v-if="trashed"
+        :task="task"
+      />
+      <!-- end task modal restore -->
+      <TaskDeleteModal
+        v-else
+        :task="task"
+      />
       <!-- end task modal delete -->
     </div>
     <!-- end flex -->
@@ -26,6 +41,7 @@
 <script>
 import TaskStateModal from './TaskStateModal.vue'
 import TaskDeleteModal from './TaskDeleteModal.vue'
+import TaskRestoreModal from './TaskRestoreModal.vue'
 import BaseButton from '@/components/Base/BaseButton.vue'
 
 export default {
@@ -34,6 +50,7 @@ export default {
   components: {
     TaskStateModal,
     TaskDeleteModal,
+    TaskRestoreModal,
     BaseButton
   },
 
@@ -41,6 +58,18 @@ export default {
     task: {
       type: Object,
       default: () => ({})
+    },
+    trashed: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  methods: {
+    goToTask () {
+      if (this.trashed) {
+        return
+      }
     }
   }
 }

@@ -1,8 +1,9 @@
 <template>
   <div class="task-state-modal">
     <BaseButton
-      @click="isActive = !isActive"
-      class="bg-black text-xs text-white font-normal uppercase hover:bg-gray-500 px-2 py-1"
+      @click="onActive"
+      class="bg-black text-xs text-white font-normal uppercase px-2 py-1"
+      :class="[ trashed ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-500' ]"
     >
       {{ task.state.name }}
     </BaseButton>
@@ -67,6 +68,10 @@ export default {
     task: {
       type: Object,
       default: () => ({})
+    },
+    trashed: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -123,6 +128,12 @@ export default {
       }
       this.selectedState = event
     },
+    onActive () {
+      if (this.trashed) {
+        return
+      }
+      this.isActive = !this.isActive
+    }
   },
 }
 </script>

@@ -17,6 +17,7 @@
       v-for="task in clonedList"
       :key="task.sort_order"
       :task="task"
+      :trashed="onlyTrashed"
     />
     <!-- end task item -->
   </draggable>
@@ -42,6 +43,17 @@ export default {
     TaskListLoading
   },
 
+  props: {
+    onlyTrashed: {
+      type: Boolean,
+      default: false
+    },
+    currentTab: {
+      type: Number,
+      default: 0
+    }
+  },
+
   data () {
     return {
       clonedList: []
@@ -54,11 +66,12 @@ export default {
       list: state => state.task.list,
       links: state => state.task.links,
       meta: state => state.task.meta,
-      filter: state => state.task.filterj
+      filter: state => state.task.filter
     })
   },
 
   created () {
+    this.setFilter({ only_trashed: this.onlyTrashed })
     this.fetchData().then(() => (this.clonedList = cloneDeep(this.list)))
   },
 
@@ -91,6 +104,10 @@ export default {
           })
           .finally(() => (this.setTaskLoadingState(false)))
       }
+    },
+    currentTab () {
+      this.setFilter({ only_trashed: this.onlyTrashed })
+      this.fetchData().then(() => (this.clonedList = cloneDeep(this.list)))
     }
   },
 
@@ -99,6 +116,7 @@ export default {
       fetchData: 'task/fetchData',
       setTaskList: 'task/setTaskList',
       setTaskLoadingState: 'task/setTaskLoadingState',
+      setFilter: 'task/setFilter',
       pushNotification: 'ui/pushNotification'
     })
   }
