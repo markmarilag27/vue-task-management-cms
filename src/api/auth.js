@@ -29,3 +29,10 @@ export const postLogout = async () => {
   const status = await response.status
   return status
 }
+
+// get user completed task
+export const getCompletedTask = async () => {
+  const response = await httpClient.get(`${ENDPOINT}/completed-tasks`)
+  const responseData = await response.data
+  return responseData
+}

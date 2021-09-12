@@ -14,6 +14,8 @@
   >
     <TopNavigation />
     <!-- end top navigation -->
+    <CompletedUserTaskChart class="max-w-screen-sm mx-auto px-4 py-8" />
+    <!-- end completed user task chart -->
     <router-view class="max-w-screen-sm mx-auto px-4 py-8" />
     <!-- end router view -->
     <Notifications />
@@ -27,13 +29,15 @@ import { mapGetters, mapMutations } from 'vuex'
 import { getAuthUserData } from './api/auth'
 import TopNavigation from '@/components/TopNavigation.vue'
 import Notifications from '@/components/Notifications.vue'
+import CompletedUserTaskChart from '@/components/CompletedUserTaskChart.vue'
 
 export default {
   name: 'App',
 
   components: {
     TopNavigation,
-    Notifications
+    Notifications,
+    CompletedUserTaskChart
   },
 
   computed: {
