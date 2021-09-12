@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import router from '@/router'
+import { validateXsrfToken } from '@/services/auth'
 
 const AUTH_USER_ENDPOINT = '/api/v1/auth/me'
 
@@ -37,6 +38,12 @@ httpClient.interceptors.response.use(
     if (error.response.status === 401 && error.response.config.url === AUTH_USER_ENDPOINT) {
       store.commit('auth/RESET_AUTH_USER')
       router.push({ name: 'login' })
+    }
+    if (error.response.status === 404) {
+      router.push({ name: 'home' })
+    }
+    if (error.response.status === 419) {
+      validateXsrfToken()
     }
     return Promise.reject(error)
   }
