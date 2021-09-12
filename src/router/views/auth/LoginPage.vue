@@ -31,7 +31,7 @@
       <!-- end password -->
       <BaseButton
         type="submit"
-        class="mt-2"
+        class="mt-2 bg-black text-white py-4"
         :disabled="isLoading"
       >
         <span class="flex justify-center items-center">

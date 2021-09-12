@@ -7,7 +7,7 @@
     <form @submit.prevent="onSubmit">
       <BaseButton
         type="submit"
-        class="py-1"
+        class="py-1 text-white"
         :disabled="isLoading"
       >
         <span class="flex justify-center items-center">
@@ -23,7 +23,7 @@
 
 <script>
 import { postLogout } from '@/api/auth'
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 import BaseButton from './Base/BaseButton.vue'
 import SVGAnimateSpin from './SVG/SVGAnimateSpin.vue'
 
@@ -40,8 +40,8 @@ export default {
   }),
 
   methods: {
-    ...mapMutations({
-      removeAuthUser: 'auth/RESET_AUTH_USER'
+    ...mapActions({
+      removeAuthUser: 'auth/removeAuthUser'
     }),
     onSubmit () {
       this.isLoading = true

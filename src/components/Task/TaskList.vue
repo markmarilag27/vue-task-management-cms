@@ -1,5 +1,10 @@
 <template>
+  <TaskListLoading v-if="isLoading" />
+  <!-- end task list loading -->
+  <NoData v-else-if="clonedList.length === 0" />
+  <!-- end no data -->
   <draggable
+    v-else
     v-model="clonedList"
     group="task"
     @start="drag=true"
@@ -24,13 +29,17 @@ import cloneDeep from 'lodash.clonedeep'
 import isEqual from 'lodash.isequal'
 import draggable from 'vuedraggable'
 import TaskItem from './TaskItem.vue'
+import NoData from '@/components/NoData.vue'
+import TaskListLoading from './TaskListLoading.vue'
 
 export default {
   name: 'TaskList',
 
   components: {
     TaskItem,
-    draggable
+    draggable,
+    NoData,
+    TaskListLoading
   },
 
   data () {
